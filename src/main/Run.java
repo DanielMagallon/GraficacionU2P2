@@ -189,7 +189,7 @@ public class Run
     static{
         fileChooser.setFileFilter(filter);
     }
-    private static void importImage(){
+    public static void importImage(){
         if(!root.exists()){
             root.mkdir();
             System.out.println("Created: "+root);

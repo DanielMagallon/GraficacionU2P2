@@ -37,36 +37,14 @@ public class ImageChosser extends JDialog
         JButton btnRef = new JButton("Refrescar");
         btnRef.addActionListener(a->refresh());
         btns.add(btnApply);
+        btns.add(btnRef);
 
         setSize(700,700);
 
         setLocationRelativeTo(null);
     }
 
-    public void refresh(){
-        bufferedImages.clear();
-        panelImages.removeAll();
-
-        for(File file : Objects.requireNonNull(Run.root.listFiles
-                (
-                        file -> {
-                            for(String ext : Run.validExt)
-                                if(file.getName().endsWith(ext))
-                                    return true;
-                            return false;
-                        }
-                )))
-        {
-            try {
-                BufferedImage bf = ImageIO.read(file);
-
-                bufferedImages.add(bf);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
+    private void run() {
         panelImages.setLayout(null);
         int x=10,y=10;
         int ind=0;
@@ -101,6 +79,48 @@ public class ImageChosser extends JDialog
             panelImages.add(lbl);
         }
 
+        panelImages.validate();
+        panelImages.repaint();
+    }
+
+    public void refresh(){
+        bufferedImages.clear();
+        panelImages.removeAll();
+
+        for(File file : Objects.requireNonNull(Run.root.listFiles
+                (
+                        file -> {
+                            for(String ext : Run.validExt)
+                                if(file.getName().endsWith(ext))
+                                    return true;
+                            return false;
+                        }
+                )))
+        {
+            try {
+                BufferedImage bf = ImageIO.read(file);
+
+                bufferedImages.add(bf);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
+        if(bufferedImages.isEmpty()){
+            panelImages.setLayout(new FlowLayout());
+            first=false;
+            JButton btn = new JButton("Aun no hay imagenes, presione aqui para importar");
+            btn.addActionListener(a->Run.importImage());
+            panelImages.add(btn);
+            return;
+        }
+
+        new Thread(this::run).start();
+        first=true;
+
     }
 
     private boolean first;
@@ -109,7 +129,6 @@ public class ImageChosser extends JDialog
     {
 
         if(!first){
-            first=true;
             refresh();
         }
 
