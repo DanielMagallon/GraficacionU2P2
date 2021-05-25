@@ -253,7 +253,10 @@ public class Tab extends JPanel
     public void updatePaint(){
         panelDibujo.repaint();
     }
-
+    public void cambiartransparencia(int transparencia) {
+    	defaultBg=new Color(defaultBg.getRed(),defaultBg.getGreen(),defaultBg.getBlue(),transparencia);
+    	panelDibujo.repaint();
+    }
     public boolean isAnimated(String animacion){
         if(timer.isRunning()){
             msg.setText(String.format("Mensaje: No es posible aplicar %s durante una animacion.",animacion));

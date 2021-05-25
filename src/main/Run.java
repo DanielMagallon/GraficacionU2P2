@@ -1,7 +1,6 @@
 package main;
 
 import bin.DegradaColor;
-import com.sun.org.apache.bcel.internal.generic.SWITCH;
 import lib.frame.DefaultFrame;
 import lib.modals.*;
 import lib.sidebar.SideBar;
@@ -170,9 +169,17 @@ public class Run
                     150, 350, datos.getcolor2(), true);
             textura = GRADIENT;
             tabbedPane.updatePaint();
+            
         }
     }
-
+   
+    private static void gradienterestaurar(){
+        if(tabbedPane.isValidPane()) {
+            tabbedPane.getTab().gp = null;
+            textura = GRADIENT;
+            tabbedPane.updatePaint();
+        }
+    }
     private static void relleno(){
         if(tabbedPane.isValidPane()) {
             tabbedPane.getTab().simpleColor = JColorChooser.showDialog(Run.frame, "Escoge un color",
@@ -180,6 +187,10 @@ public class Run
             textura = FILL;
             tabbedPane.updatePaint();
         }
+    }
+    //-------------------------------------------------------------------------------aqui la transparencia mamalona -------------------------------------------------
+    private static void transparencia(int trans) {
+    	tabbedPane.updateColortrans(trans);
     }
 
     public static File root = new File(System.getProperty("user.dir")+"/texturas");
@@ -397,6 +408,7 @@ public class Run
 
             case "REST":
                 tabbedPane.resetShape();
+                gradienterestaurar();
                 break;
 
             case "NESC":
@@ -467,7 +479,7 @@ public class Run
     {
 
             tabbedPane.addTab(frame,"Proyecto 2",Run::paintCanvas,1000,600,
-                    new Color(0x1A2136),new Color(0x325180),25);
+                    new Color(0x1A2136),new Color(	50, 81, 128),25);
     }
 
 

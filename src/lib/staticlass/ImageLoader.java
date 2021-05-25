@@ -64,8 +64,8 @@ public class ImageLoader
      * Imagen para gradientes
      */
 
-    public static ImageIcon paint = getImageIcon("material/paint36px.png");
-    public static ImageIcon paintR = getImageIcon("material/paint26px.png");
+    public static ImageIcon paint = getImageIcon("material/paintg36px.png");
+    public static ImageIcon paintR = getImageIcon("material/paintg26px.png");
 
     /**
      *     Imagen para relleno normal
@@ -76,8 +76,8 @@ public class ImageLoader
     /**
      *     Imagen para textura con imagen
      */
-    public static ImageIcon textura = getImageIcon("material/paint36px.png");
-    public static ImageIcon texturaR = getImageIcon("material/paint26px.png");
+    public static ImageIcon textura = getImageIcon("material/texturef36px.png");
+    public static ImageIcon texturaR = getImageIcon("material/texturef26px.png");
 
     /**
      *  Imagen para icnono importar imagenes

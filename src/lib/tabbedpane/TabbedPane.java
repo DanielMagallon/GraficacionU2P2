@@ -59,7 +59,11 @@ public class TabbedPane extends JTabbedPane {
         if (isValidPane())
             selectedTab.updatePaint();
     }
-
+    ///-------------------------------------------------------------------------------------------------------------
+    public void updateColortrans(int transparencia) {
+        if (isValidPane())
+            selectedTab.cambiartransparencia(transparencia);
+    }
     public void translate(int x, int y) {
         if (isValidPane()) {
 
