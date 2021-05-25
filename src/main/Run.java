@@ -38,7 +38,7 @@ public class Run
     private static DegradaColor datos;
     private static Gradient gra;
 
-    private static int textura;
+
     private static final int GRADIENT=1,FILL=2,TEXTURE=3;
 
     private static JMenuBar barraM;
@@ -164,33 +164,35 @@ public class Run
 
     private static void gradiente(){
         if(tabbedPane.isValidPane()) {
-            datos = gra.mostrar();
-            tabbedPane.getTab().gp = new GradientPaint(150, 180, datos.getcolor1(),
-                    150, 350, datos.getcolor2(), true);
-            textura = GRADIENT;
-            tabbedPane.updatePaint();
-            
+            try {
+                datos = gra.mostrar();
+                tabbedPane.getTab().gp = new GradientPaint(150, 180, datos.getcolor1(),
+                        150, 350, datos.getcolor2(), true);
+                tabbedPane.getTab().textura = GRADIENT;
+                tabbedPane.updatePaint();
+            }catch (NullPointerException ignored){}
         }
     }
-   
-    private static void gradienterestaurar(){
-        if(tabbedPane.isValidPane()) {
-            tabbedPane.getTab().gp = null;
-            textura = GRADIENT;
+
+    public static void gradienterestaurar(){
+        tabbedPane.getTab().textura = FILL;
+        tabbedPane.resetShape();
             tabbedPane.updatePaint();
-        }
     }
     private static void relleno(){
         if(tabbedPane.isValidPane()) {
             tabbedPane.getTab().simpleColor = JColorChooser.showDialog(Run.frame, "Escoge un color",
                     tabbedPane.getTab().simpleColor);
-            textura = FILL;
+            tabbedPane.getTab().textura = FILL;
             tabbedPane.updatePaint();
         }
     }
+
+    public static Transparencia transModal;
     //-------------------------------------------------------------------------------aqui la transparencia mamalona -------------------------------------------------
-    private static void transparencia(int trans) {
-    	tabbedPane.updateColortrans(trans);
+    private static void transparencia() {
+        tabbedPane.getTab().textura = FILL;
+        tabbedPane.updateColortrans();
     }
 
     public static File root = new File(System.getProperty("user.dir")+"/texturas");
@@ -243,7 +245,7 @@ public class Run
     private static void textura(){
 
         if(tabbedPane.isValidPane()) {
-            textura = TEXTURE;
+            tabbedPane.getTab().textura = TEXTURE;
             BufferedImage img = imgChooser.choose();
             if (img != null) {
 
@@ -324,7 +326,9 @@ public class Run
     private static void initUI(){
         UIManager.put("TabbedPane.selected",new Color(0x7A97F1));
         UIManager.put("TabbedPane.foreground",new Color(0x000000));
-        UIManager.put("Button.background",new Color(0xFFFFFF, true));
+        UIManager.put("Button.background",new Color(0x313955));
+        UIManager.put("Slider.background",new Color(0x1A2136));
+        UIManager.put("Slider.foreground",Color.white);
         UIManager.put("MenuBar.background", new Color(0x1A2136));
         UIManager.put("Menu.foreground", new Color(0xF8F8F8));
         UIManager.put("MenuItem.background", new Color(0x313955));
@@ -344,6 +348,7 @@ public class Run
     {
         initUI();
         frame = new DefaultFrame("Proyecto 2 <--> Unidad 2").minSize(700,700);
+        transModal = new Transparencia(frame,true);
         gra = new Gradient(frame, true);
         imgChooser = new ImageChosser(frame);
         tabbedPane = new TabbedPane();
@@ -419,6 +424,10 @@ public class Run
                 tabbedPane.stop();
                 return;
 
+            case "TRANS":
+                transparencia();
+                return;
+
             case "RI":
                 optionPaint = OptionsPaint.ROTATE_CON;
                 break;
@@ -479,7 +488,8 @@ public class Run
     {
 
             tabbedPane.addTab(frame,"Proyecto 2",Run::paintCanvas,1000,600,
-                    new Color(0x1A2136),new Color(	50, 81, 128),25);
+                    new Color(0x1A2136),new Color(	50, 81, 128),
+                    new Color(0xFAB1B3),25);
     }
 
 
@@ -522,7 +532,7 @@ public class Run
                 break;
         }
 
-        switch (textura)
+        switch (tabbedPane.getTab().textura)
         {
             case GRADIENT:
                 g.setPaint(tabbedPane.getTab().gp);

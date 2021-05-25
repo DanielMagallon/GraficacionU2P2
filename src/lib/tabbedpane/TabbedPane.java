@@ -51,6 +51,9 @@ public class TabbedPane extends JTabbedPane {
             if (selectedTab.isAnimated("el reset"))
                 return;
 
+            selectedTab.gp = null;
+            selectedTab.texturePaint = null;
+            selectedTab.reset();
             selectedTab.drawer.restaurar();
         }
     }
@@ -60,9 +63,13 @@ public class TabbedPane extends JTabbedPane {
             selectedTab.updatePaint();
     }
     ///-------------------------------------------------------------------------------------------------------------
-    public void updateColortrans(int transparencia) {
+    public void updateColortrans() {
         if (isValidPane())
-            selectedTab.cambiartransparencia(transparencia);
+        {
+            int alpha = Run.transModal.getAlpha(selectedTab.simpleColor);
+            if(alpha!=-1)
+                selectedTab.cambiartransparencia(alpha);
+        }
     }
     public void translate(int x, int y) {
         if (isValidPane()) {
@@ -243,9 +250,9 @@ public class TabbedPane extends JTabbedPane {
 
 
     public void addTab(JFrame f, String title,GraphicsRunnable gr, int maxWidth, int maxHeight, Color bg, Color line,
-                        int pixelSize)
+                        Color sC,int pixelSize)
     {
-        this.addTab(title, new Tab(f,gr,maxWidth,maxHeight,bg,line,pixelSize));
+        this.addTab(title, new Tab(f,gr,maxWidth,maxHeight,bg,line,sC,pixelSize));
         selectTab();
     }
 
@@ -255,11 +262,5 @@ public class TabbedPane extends JTabbedPane {
             this.setSelectedIndex(index - 1);
         }
 
-    }
-
-    public void addTab(JFrame f, String title,GraphicsRunnable gr, int maxWidth, int maxHeight, Color bg, Color line)
-    {
-        this.addTab(title,new Tab(f,gr,maxWidth,maxHeight,bg,line));
-        selectTab();
     }
 }

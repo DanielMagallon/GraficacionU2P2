@@ -64,6 +64,9 @@ public class SideBar extends JPanel
             addSideComponent(ImageLoader.textura, ImageLoader.texturaR, handler, "Aplicar textura de imagen",
                     "TEXTU",true);
 
+            addSideComponent(ImageLoader.config, ImageLoader.configR, handler, "Aplicar transparencia",
+                    "TRANS",true);
+
             addSideComponent(ImageLoader.reset, ImageLoader.resetR, handler, "Restaurar figura",
                     "REST",true);
 

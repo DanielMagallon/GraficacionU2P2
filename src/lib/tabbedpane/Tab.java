@@ -18,9 +18,10 @@ public class Tab extends JPanel
 {
     private GraphicsRunnable graphicsRunnable;
 
-    private Color defaultBg,defaultLineColor;
-
+    private Color defaultLineColor,bgColor;
+    public Color simpleColor;
     private boolean paintLines,mover;
+    public int textura;
 
     private int pixelSize;
     private boolean enable,selectPoint;
@@ -39,11 +40,11 @@ public class Tab extends JPanel
 
     public  GradientPaint gp;
     public TexturePaint texturePaint;
-    public Color simpleColor = Color.orange;
 
     private Tab(JFrame f)
     {
         setLayout(new BorderLayout());
+
 
         animationStatus = AnimationStatus.NONE;
 
@@ -52,10 +53,7 @@ public class Tab extends JPanel
         popupMenu = new JPopupMenu();
 
         JMenuItem mtReset = new JMenuItem("Restaurar figura", ImageLoader.resetR);
-        mtReset.addActionListener(a-> {
-            drawer.restaurar();
-            repaint();
-        });
+        mtReset.addActionListener(a-> Run.gradienterestaurar());
         popupMenu.add(mtReset);
 
         JMenuItem mtSelectPoint = new JMenuItem("Seleccionar punto origen",ImageLoader.origenR);
@@ -113,7 +111,7 @@ public class Tab extends JPanel
                 int cx=e.getX();
                 int cy=e.getY();
                 int pfx= (int) drawer.S.getBounds2D().getCenterX();
-                int pfy= (int) drawer.S.getBounds2D().getCenterY();
+//                int pfy= (int) drawer.S.getBounds2D().getCenterY();
                 if(cx<pfx && e.getClickCount()>=2)
                     drawer.rotarcontra(5);
                 else
@@ -178,25 +176,23 @@ public class Tab extends JPanel
         this.animation = false;
     }
 
-    public Tab(JFrame f, GraphicsRunnable gr,int maxWidth,int maxHeight,Color bg,Color line,int pixelSize)
-    {
+
+    private Color aux;
+
+    public Tab(JFrame f, GraphicsRunnable gr,int maxWidth,int maxHeight,Color bg,Color line,Color shapeColor,int pixelSize) {
         this(f);
         graphicsRunnable = gr;
-        defaultBg = bg;
+        bgColor = bg;
+        simpleColor  = shapeColor;
+        aux = shapeColor;
         defaultLineColor = line;
         this.paintLines = true;
         this.pixelSize = pixelSize;
-        setPreferredSize(new Dimension(maxWidth,maxHeight));
+        setPreferredSize(new Dimension(maxWidth, maxHeight));
     }
 
-    public Tab(JFrame f, GraphicsRunnable gr,int maxWidth,int maxHeight,Color bg,Color line)
-    {
-        this(f);
-        graphicsRunnable = gr;
-        defaultBg = bg;
-        defaultLineColor = line;
-        pixelSize = 10;
-        setPreferredSize(new Dimension(maxWidth,maxHeight));
+    public void reset(){
+        simpleColor = aux;
     }
 
     private void showMenu(MouseEvent mouseEvent){
@@ -227,7 +223,7 @@ public class Tab extends JPanel
 
     public void paintPanel(Graphics graphics)
     {
-        graphics.setColor(defaultBg);
+        graphics.setColor(bgColor);
         graphics.fillRect(0,0, getPreferredSize().width, getPreferredSize().height);
 
         if (paintLines)
@@ -246,6 +242,7 @@ public class Tab extends JPanel
                 graphics.drawLine(0,y,getWidth(),y);
             }
         }
+        graphics.setColor(simpleColor);
         graphicsRunnable.paintCanvas((Graphics2D) graphics);
 
     }
@@ -254,7 +251,7 @@ public class Tab extends JPanel
         panelDibujo.repaint();
     }
     public void cambiartransparencia(int transparencia) {
-    	defaultBg=new Color(defaultBg.getRed(),defaultBg.getGreen(),defaultBg.getBlue(),transparencia);
+    	simpleColor =new Color(simpleColor.getRed(), simpleColor.getGreen(), simpleColor.getBlue(),transparencia);
     	panelDibujo.repaint();
     }
     public boolean isAnimated(String animacion){
