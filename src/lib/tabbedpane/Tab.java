@@ -34,7 +34,8 @@ public class Tab extends JPanel
     public Drawer drawer;
     private JLabel msg;
     public AnimationStatus animationStatus;
-
+    public BasicStroke strk;
+    public Color contorno;
     private JPanel panelDibujo;
 
 
@@ -51,7 +52,8 @@ public class Tab extends JPanel
         drawer = new Drawer(ShapePoints.gp1);
 
         popupMenu = new JPopupMenu();
-
+        strk=new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+        contorno=Color.RED;
         JMenuItem mtReset = new JMenuItem("Restaurar figura", ImageLoader.resetR);
         mtReset.addActionListener(a-> Run.gradienterestaurar());
         popupMenu.add(mtReset);
@@ -251,8 +253,14 @@ public class Tab extends JPanel
         panelDibujo.repaint();
     }
     public void cambiartransparencia(int transparencia) {
-    	simpleColor =new Color(simpleColor.getRed(), simpleColor.getGreen(), simpleColor.getBlue(),transparencia);
+    
+    	try {
+    		simpleColor =new Color(simpleColor.getRed(), simpleColor.getGreen(), simpleColor.getBlue(),transparencia);
     	panelDibujo.repaint();
+    	}catch(NullPointerException e) {
+    		JOptionPane.showMessageDialog(null, "No se puede agregar transparencia auna imagen eliga un color");
+    	}
+    	
     }
     public boolean isAnimated(String animacion){
         if(timer.isRunning()){

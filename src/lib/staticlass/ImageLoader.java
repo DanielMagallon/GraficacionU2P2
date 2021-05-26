@@ -58,6 +58,9 @@ public class ImageLoader
 
     public static ImageIcon config = getImageIcon("material/settings36px.png");
     public static ImageIcon configR = getImageIcon("material/settings26px.png");
+    
+    public static ImageIcon estrokee= getImageIcon("material/stroke36px.png");
+    public static ImageIcon estrokeeR = getImageIcon("material/stroke26px.png");
 
 
     /**

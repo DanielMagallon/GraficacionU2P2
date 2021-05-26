@@ -1,6 +1,7 @@
 package main;
 
 import bin.DegradaColor;
+import bin.Strokesdata;
 import lib.frame.DefaultFrame;
 import lib.modals.*;
 import lib.sidebar.SideBar;
@@ -38,12 +39,11 @@ public class Run
     private static DegradaColor datos;
     private static Gradient gra;
 
-
     private static final int GRADIENT=1,FILL=2,TEXTURE=3;
 
     private static JMenuBar barraM;
     private static JMenuItem opcRest,opcEsc,opcRotar,opcDef, opcRefX,opcRefY,opcTras,opcSalir,opcDes,opcAyu;
-
+    
 
     private static void initJMenuBar(){
         JMenu Menu1,Menu2;
@@ -166,8 +166,14 @@ public class Run
         if(tabbedPane.isValidPane()) {
             try {
                 datos = gra.mostrar();
-                tabbedPane.getTab().gp = new GradientPaint(150, 180, datos.getcolor1(),
-                        150, 350, datos.getcolor2(), true);
+                if(datos.getposision().equalsIgnoreCase("Vertical")) {
+                	tabbedPane.getTab().gp = new GradientPaint(386, 246, datos.getcolor1(),
+                            224, 441, datos.getcolor2(), true);
+                }else {
+                	tabbedPane.getTab().gp = new GradientPaint(150, 218, datos.getcolor1(),
+                            541, 443, datos.getcolor2(), true);
+                }
+                
                 tabbedPane.getTab().textura = GRADIENT;
                 tabbedPane.updatePaint();
             }catch (NullPointerException ignored){}
@@ -175,7 +181,12 @@ public class Run
     }
 
     public static void gradienterestaurar(){
-        tabbedPane.getTab().textura = FILL;
+    	try {
+    	tabbedPane.getTab().textura = FILL;	
+    	}catch(NullPointerException e) {
+    		System.out.println("valio madres tambien");
+    	}
+        
         tabbedPane.resetShape();
             tabbedPane.updatePaint();
     }
@@ -189,10 +200,32 @@ public class Run
     }
 
     public static Transparencia transModal;
+    public static Strokesss strokModal;
     //-------------------------------------------------------------------------------aqui la transparencia mamalona -------------------------------------------------
     private static void transparencia() {
-        tabbedPane.getTab().textura = FILL;
+    	try {
+    		 tabbedPane.getTab().textura = FILL;
+    	}catch(NullPointerException e) {
+    		System.out.println("valiendo madres");
+    	}
+       
         tabbedPane.updateColortrans();
+    }
+    
+    private static void cambiarstrokes() {
+    	Strokesdata data;
+    	data=tabbedPane.updateStokes();
+    	tabbedPane.getTab().contorno=data.getcolor1();
+    	if(data.getposision().equalsIgnoreCase("uno")) {
+    		tabbedPane.getTab().strk=new BasicStroke(data.getgrosor(), BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
+    	}else if(data.getposision().equalsIgnoreCase("dos")) {
+    		tabbedPane.getTab().strk=new BasicStroke(data.getgrosor(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
+    	}else{
+    		tabbedPane.getTab().strk=new BasicStroke(data.getgrosor(), BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
+    	}
+    	
+        tabbedPane.updatePaint();
+    
     }
 
     public static File root = new File(System.getProperty("user.dir")+"/texturas");
@@ -287,11 +320,11 @@ public class Run
                 }
             }
             if(e.getSource() == opcRefY) {
-                optionPaint = OptionsPaint.REFLEJAR_Y;
+                optionPaint = OptionsPaint.REFLEJAR_X;
                 tabbedPane.updatePaint();
             }
             else if(e.getSource() == opcRefX){
-                optionPaint = OptionsPaint.REFLEJAR_X;
+                optionPaint = OptionsPaint.REFLEJAR_Y;
                 tabbedPane.updatePaint();
             }else if(e.getSource() == opcDef){
                 double res[] = modalShear.mostrar();
@@ -349,6 +382,7 @@ public class Run
         initUI();
         frame = new DefaultFrame("Proyecto 2 <--> Unidad 2").minSize(700,700);
         transModal = new Transparencia(frame,true);
+        strokModal =new Strokesss(frame,true);
         gra = new Gradient(frame, true);
         imgChooser = new ImageChosser(frame);
         tabbedPane = new TabbedPane();
@@ -358,6 +392,8 @@ public class Run
         modalEscalar = new ScaleWin(frame,true);
         modalShear = new ShearWin(frame,true);
         modalTras = new TranslateWin(frame,true);
+        
+        
         initJMenuBar();
 
         sc = new JScrollPane();
@@ -427,17 +463,22 @@ public class Run
             case "TRANS":
                 transparencia();
                 return;
+            case "STROKE":
+            	cambiarstrokes();
+            	return;
 
             case "RI":
                 optionPaint = OptionsPaint.ROTATE_CON;
                 break;
 
             case "REFX":
-                optionPaint = OptionsPaint.REFLEJAR_X;
+            	optionPaint = OptionsPaint.REFLEJAR_Y;
+               
                 break;
 
             case "REFY":
-                optionPaint = OptionsPaint.REFLEJAR_Y;
+            	optionPaint = OptionsPaint.REFLEJAR_X;
+                
                 break;
 
             case "GR":
@@ -548,7 +589,11 @@ public class Run
         }
 
         g.fill(tabbedPane.getShape());
-
+        g.setColor(tabbedPane.getTab().contorno);
+        
+        g.setStroke(tabbedPane.getTab().strk);
+        g.draw(tabbedPane.getShape());
+      
         optionPaint = OptionsPaint.DEFAULT;
     }
 

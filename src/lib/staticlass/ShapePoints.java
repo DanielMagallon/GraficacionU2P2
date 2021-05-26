@@ -8,8 +8,7 @@ public class ShapePoints
     public static GeneralPath gp1;
     static {
         gp1=new GeneralPath();
-        gp1.moveTo(345,298);
-        gp1.lineTo(150,186);
+        gp1.moveTo(150,186);
         gp1.lineTo(183,179);
         gp1.lineTo(209,174);
         gp1.lineTo(220,173);

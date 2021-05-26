@@ -66,6 +66,9 @@ public class SideBar extends JPanel
 
             addSideComponent(ImageLoader.config, ImageLoader.configR, handler, "Aplicar transparencia",
                     "TRANS",true);
+            
+            addSideComponent(ImageLoader.estrokee, ImageLoader.estrokeeR, handler, "Aplicar Strokes y terminaciones",
+                    "STROKE",true);
 
             addSideComponent(ImageLoader.reset, ImageLoader.resetR, handler, "Restaurar figura",
                     "REST",true);

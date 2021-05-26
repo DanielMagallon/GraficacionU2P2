@@ -6,6 +6,9 @@ import main.Run;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalTabbedPaneUI;
+
+import bin.Strokesdata;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
@@ -13,7 +16,7 @@ public class TabbedPane extends JTabbedPane {
     private int index;
 
     private Tab selectedTab;
-
+  Strokesdata data;
     public TabbedPane() {
 
 
@@ -42,6 +45,7 @@ public class TabbedPane extends JTabbedPane {
         if (isValidPane()) {
             selectedTab.animation = true;
         }
+       
         return this;
     }
 
@@ -55,6 +59,8 @@ public class TabbedPane extends JTabbedPane {
             selectedTab.texturePaint = null;
             selectedTab.reset();
             selectedTab.drawer.restaurar();
+            selectedTab.strk= new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+            selectedTab.contorno=Color.RED;
         }
     }
 
@@ -62,7 +68,7 @@ public class TabbedPane extends JTabbedPane {
         if (isValidPane())
             selectedTab.updatePaint();
     }
-    ///-------------------------------------------------------------------------------------------------------------
+    ///-----------------------------------------------------f--------------------------------------------------------
     public void updateColortrans() {
         if (isValidPane())
         {
@@ -71,6 +77,16 @@ public class TabbedPane extends JTabbedPane {
                 selectedTab.cambiartransparencia(alpha);
         }
     }
+    
+    public Strokesdata updateStokes() {
+        if (isValidPane())
+        {
+            data=Run.strokModal.Mostrarstroke();
+           
+        }
+        return data;
+    }
+    
     public void translate(int x, int y) {
         if (isValidPane()) {
 
